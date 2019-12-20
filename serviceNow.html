@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Service Now Sample</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+
+      .demo {
+        display: flex;
+        width: 100%;
+        height: 500px;
+      }
+
+      #container {
+        width: 50%;
+        border: 1px solid grey;
+      }
+
+      #container2 {
+        width: 50%;
+        border: 1px solid grey;
+      }
+
+      #tools-wrap {
+        margin-top: 20px;
+        width: 100%;
+        display: flex;
+      }
+
+      #tools-left,
+      #tools-right {
+        flex: 1;
+      }
+
+      #tools-right,
+      #tools-left {
+        text-align: center;
+      }
+
+      #tools-right textarea,
+      #tools-left textarea {
+        width: 90%;
+        height: 200px;
+      }
+    </style>
+    <!-- go.js license setup -->
+    <script type="text/javascript" src="dist/lib/goJS/go.js"></script>
+    <script type="text/javascript" src="dist/lib/goJS/Figures.js"></script>
+    <script type="text/javascript">
+      go.licenseKey =
+        '73f047e0b11c28c702d90776423d6bf919a17564cf841ba30b0414f3ed086006329fe82804d2dc9382a81bfe137dc389d8c03c20c349563de730d4db4ae083aab73221e5120b1089f45626969eff2bf1ae6a61f497e571a288288de0fbabc29c54f7f3d557c80e';
+    </script>
+    <style>
+      .gshHeader {
+        border-color: #8bdcf6;
+        font-size: 10;
+        margin-bottom: 11;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo">
+      <div id="container"></div>
+      <div id="container2"></div>
+    </div>
+    <div id="tools-wrap">
+      <div id="tools-left">
+        <textarea id="pageDataInput"></textarea>
+        <br />
+        <button id="doOpenBtn">draw1</button>
+      </div>
+      <div id="tools-right">
+        <textarea id="pageDataInput2"></textarea>
+        <br />
+        <button id="doOpenBtn2">draw2</button>
+      </div>
+    </div>
+
+    <!-- deps -->
+    <script type="text/javascript" src="dist/lib/jquery/jquery.min.js"></script>
+    <script
+      type="text/javascript"
+      src="dist/lib/angular/angular.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="dist/js/lib-angular-plugins.min.js"
+    ></script>
+    <script type="text/javascript" src="dist/js/lib-tools.min.js"></script>
+    <script type="text/javascript" src="dist/js/configSettings.js"></script>
+    <script type="text/javascript" src="dist/js/nb.framework.min.js"></script>
+    <script type="text/javascript" src="dist/js/nb.ng.min.js"></script>
+    <script type="text/javascript" src="dist/js/nb.common.min.js"></script>
+    <script type="text/javascript" src="dist/js/nb.uiframework.min.js"></script>
+    <script type="text/javascript" src="dist/js/nb.datamodel.min.js"></script>
+    <script
+      type="text/javascript"
+      src="dist/js/nb.qmap.layouttools.min.js"
+    ></script>
+    <script type="text/javascript" src="dist/js/nb.minitask.min.js"></script>
+    <script type="text/javascript" src="dist/js/nb.dataview.min.js"></script>
+    <script type="text/javascript" src="dist/js/nb.qmap.min.js"></script>
+    <script type="text/javascript" src="dist/js/nb.servicenow.min.js"></script>
+    <!-- load sample data -->
+    <script type="text/javascript" src="./loadData.js"></script>
+    <script type="text/javascript">
+      // use the wrapper class to set up the diagram
+      // you can have multiple ServiceNowMap instances attached to different anchors
+      const snmb = new ServiceNowMapBuilder();
+      snmb
+        .setApiRoot('http://localhost/ServicesAPI')
+        .setTenantId('86dc5405-7db1-570e-1a2c-3bc546d289bd')
+        .buildImgUri();
+      const snm1 = snmb.setMapAnchorId('container').build();
+      snm1.initGojsDiagram();
+      const snm2 = snmb.setMapAnchorId('container2').build();
+      snm2.initGojsDiagram();
+      $('#doOpenBtn').on('click', function() {
+        var data = $('#pageDataInput').val();
+        if (data) {
+          try {
+            snm1.openMap(JSON.parse(data));
+            $(this).attr('disable', 'disable');
+          } catch (e) {
+            console.error('page data invalid');
+          }
+        }
+      });
+      $('#doOpenBtn2').on('click', function() {
+        var data = $('#pageDataInput2').val();
+        if (data) {
+          try {
+            snm2.openMap(JSON.parse(data));
+            $(this).attr('disable', 'disable');
+          } catch (e) {
+            console.error('page data invalid');
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
